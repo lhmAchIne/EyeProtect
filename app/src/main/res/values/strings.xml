@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">EyeProtect</string>
+    <string name="setting">个人设置</string>
+    <string name="copyright">© lhmachine. All rights reserved.</string>
+    <string name="switch_open_ontine">定时开启护眼模式</string>
+    <string name="switch_modify_brightness">修改系统亮度</string>
+    <string name="dim">透明度</string>
+    <string name="start_time">开始时间</string>
+    <string name="end_time">结束时间</string>
+    <string name="brightness">亮度</string>
+</resources>
