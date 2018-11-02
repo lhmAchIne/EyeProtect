@@ -16,13 +16,18 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import java.security.MessageDigest;
 import java.security.Permission;
 import java.util.Calendar;
@@ -33,15 +38,18 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     private boolean open_symbol = false;
-    private ImageButton bt;
+    private ImageView bt;
     private Timer timer;
+    private ConstraintLayout main_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
-        bt = (ImageButton) findViewById(R.id.bt_eye);
+        bt = (ImageView) findViewById(R.id.bt_eye);
+        main_layout = (ConstraintLayout)findViewById(R.id.mainlayout);
 
         //检查权限
         checkPermission();
@@ -54,12 +62,14 @@ public class MainActivity extends AppCompatActivity {
                 if (open_symbol){
                     //关闭护眼
                     open_symbol = false;
-                    bt.setBackgroundResource(R.drawable.ic_eye_close);
+                    main_layout.setBackgroundResource(R.drawable.image_day);
+                    bt.setImageResource(R.drawable.sun);
                     stopService(new Intent(getApplicationContext(), EyeProtectService.class));
                 }else{
                     //开启护眼
                     open_symbol = true;
-                    bt.setBackgroundResource(R.drawable.ic_eye_open);
+                    main_layout.setBackgroundResource(R.drawable.image_nig);
+                    bt.setImageResource(R.drawable.moon);
                     startService(new Intent(getApplicationContext(), EyeProtectService.class));
                 }
                 if (isServiceWork(getApplicationContext(), "cn.lhmachine.eyeprotect.TimeService")){
@@ -91,10 +101,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (isServiceWork(getApplicationContext(), "cn.lhmachine.eyeprotect.EyeProtectService")){
             open_symbol = true;
-            bt.setImageResource(R.drawable.ic_eye_open);
+            main_layout.setBackgroundResource(R.drawable.image_nig);
+            bt.setImageResource(R.drawable.moon);
         }else{
             open_symbol = false;
-            bt.setImageResource(R.drawable.ic_eye_close);
+            main_layout.setBackgroundResource(R.drawable.image_day);
+            bt.setImageResource(R.drawable.sun);
         }
 
         timer = new Timer();
@@ -115,10 +127,12 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message message){
             if (message.what == 1){
                 open_symbol = true;
-                bt.setImageResource(R.drawable.ic_eye_open);
+                main_layout.setBackgroundResource(R.drawable.image_nig);
+                bt.setImageResource(R.drawable.moon);
             }else{
                 open_symbol = false;
-                bt.setImageResource(R.drawable.ic_eye_close);
+                main_layout.setBackgroundResource(R.drawable.image_day);
+                bt.setImageResource(R.drawable.sun);
             }
         }
     };

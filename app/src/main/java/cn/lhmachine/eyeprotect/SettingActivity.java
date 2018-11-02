@@ -1,8 +1,11 @@
 package cn.lhmachine.eyeprotect;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.provider.Settings;
@@ -100,8 +103,24 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b){
-                    view_modify_brightness.setVisibility(View.VISIBLE);
-                    setBrightness();
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(SettingActivity.this);
+                    dialog.setTitle("提示");
+                    dialog.setMessage("该功能会关闭系统的自动亮度调节，请问是否确定打开？");
+                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            modify_brightness.setChecked(false);
+                            view_modify_brightness.setVisibility(View.GONE);
+                        }
+                    });
+                    dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            view_modify_brightness.setVisibility(View.VISIBLE);
+                            setBrightness();
+                        }
+                    });
+                    dialog.show();
                 }else{
                     view_modify_brightness.setVisibility(View.GONE);
                 }
@@ -127,6 +146,7 @@ public class SettingActivity extends AppCompatActivity {
                 try{
                     //设置当前屏幕亮度
                     Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, i);
+                    Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
                 }
                 catch (Exception localException){
                     Log.d("set brightness error", localException.toString());

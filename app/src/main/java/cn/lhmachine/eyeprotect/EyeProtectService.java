@@ -68,7 +68,7 @@ public class EyeProtectService extends Service {
 
     //通知栏显示信息
     private void showNotification(){
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_launcher_foreground).setContentTitle("Eye Protect").setContentText("护眼模式已开启");
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.mipmap.ic_launcher).setContentTitle("Eye Protect").setContentText("护眼模式已开启");
         //创建通知背点击时触发的Intent
         Intent resultIntent = new Intent(this, MainActivity.class);
         //创建任务栈Builder

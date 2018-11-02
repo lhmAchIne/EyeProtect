@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import java.sql.Time;
 import java.text.ParsePosition;
@@ -61,7 +62,7 @@ public class TimeService extends Service {
                     int hour = c.get(Calendar.HOUR_OF_DAY);
                     int minute = c.get(Calendar.MINUTE);
                     if (start_hour<end_hour || (start_hour==end_hour && start_minute<end_minute)){
-                        if ((hour>start_hour && hour<end_hour) || (hour==start_hour && minute>=start_minute) || (hour==end_hour && minute<end_minute)){
+                        if ((hour>start_hour && hour<end_hour) || (hour==start_hour && minute>=start_minute && minute<end_minute) || (hour==end_hour && minute<end_minute && hour>start_hour) || (hour==end_hour && minute<end_minute && hour==start_hour && minute>=start_minute)){
                             if (!isServiceWork(getApplicationContext(), "cn.lhmachine.eyeprotect.EyeProtectService")){
                                 startService(new Intent(getApplicationContext(), EyeProtectService.class));
                             }
@@ -90,7 +91,7 @@ public class TimeService extends Service {
      * 通知栏显示信息
      */
     private void showNotification(){
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_launcher_foreground).setContentTitle("Eye Protect").setContentText("定时任务已开启");
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this).setSmallIcon(R.mipmap.ic_launcher).setContentTitle("Eye Protect").setContentText("定时任务已开启");
         //创建通知背点击时触发的Intent
         Intent resultIntent = new Intent(this, SettingActivity.class);
         //创建任务栈Builder
