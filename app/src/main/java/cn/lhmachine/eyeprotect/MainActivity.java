@@ -74,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (isServiceWork(getApplicationContext(), "cn.lhmachine.eyeprotect.TimeService")){
                     stopService(new Intent(getApplicationContext(), TimeService.class));
+                    SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+                    editor.putBoolean("onTimeOpen", false);
+                    editor.apply();
                     Toast.makeText(MainActivity.this, "定时功能已关闭", Toast.LENGTH_SHORT).show();
                 }
             }
